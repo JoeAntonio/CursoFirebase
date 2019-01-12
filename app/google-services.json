@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "350684185903",
+    "firebase_url": "https://ed-team-b760c.firebaseio.com",
+    "project_id": "ed-team-b760c",
+    "storage_bucket": "ed-team-b760c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350684185903:android:398d8df0d99b578b",
+        "android_client_info": {
+          "package_name": "cursofirebase.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350684185903-te6u43g3srho7qq6buvqfklvrds81nol.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cursofirebase.com",
+            "certificate_hash": "18e1971c9a42803a76c2a87809fd357438d8d31c"
+          }
+        },
+        {
+          "client_id": "350684185903-fd0ei3rabvflrvp2odl2jddob0g8fe4q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdlPntbnz9XU6cv05vkAEwbBhTCrqIP0M"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "350684185903-fd0ei3rabvflrvp2odl2jddob0g8fe4q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

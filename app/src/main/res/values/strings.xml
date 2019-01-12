@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">CursoFirebase</string>
+    <string name="correo">Correo electrónico</string>
+    <string name="clave">Contraseña</string>
+    <string name="boton_registro">Registrate</string>
+    <string name="boton_acceder">Acceder</string>
+</resources>
