@@ -1,9 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegistrarActivity">
+    tools:context=".RegistrarActivity"
+    android:orientation="vertical"
+    >
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/padding"
+        android:orientation="vertical"
+        tools:ignore="UselessLeaf,UselessParent"
+        >
+        
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
 
-</android.support.constraint.ConstraintLayout>
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/id_correo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/editText_correo"
+                android:textSize="@dimen/textSize_normal"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/id_clave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/editText_clave"
+                android:textSize="@dimen/textSize_normal"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/boton_aceptar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_aceptar"
+            android:layout_marginTop="@dimen/marginTop_lite"
+            android:layout_marginBottom="@dimen/marginBottom"
+            />
+        
+    </LinearLayout>
+
+</LinearLayout>

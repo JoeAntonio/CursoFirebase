@@ -15,57 +15,61 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class RegistrarActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText correo, clave;
-    private Button aceptar;
-    private FirebaseAuth auth;
+    private Button registrar, acceder;
+    FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.registrar_activity);
+        setContentView(R.layout.login_activity);
         auth = FirebaseAuth.getInstance();
 
         correo = (EditText) findViewById(R.id.id_correo);
         clave = (EditText) findViewById(R.id.id_clave);
-        aceptar = (Button) findViewById(R.id.boton_aceptar);
+        registrar = (Button) findViewById(R.id.boton_registrate);
+        acceder = (Button) findViewById(R.id.boton_acceder);
 
-        aceptar.setOnClickListener(this);
-
+        registrar.setOnClickListener(this);
+        acceder.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.boton_aceptar:
+            case R.id.boton_registrate:
+                Intent intent = new Intent(LoginActivity.this, RegistrarActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.boton_acceder:
                 String userE = correo.getText().toString();
-                String passwordE = clave.getText().toString();
+                String password = clave.getText().toString();
 
                 if (TextUtils.isEmpty(userE)) {
                     Toast.makeText(getApplicationContext(), "coloca un correo", Toast.LENGTH_SHORT).show();
                 }
 
-                if (TextUtils.isEmpty(passwordE)) {
+                if (TextUtils.isEmpty(password)) {
                     Toast.makeText(getApplicationContext(), "coloca una contraseña", Toast.LENGTH_SHORT).show();
                 }
 
-                auth.createUserWithEmailAndPassword(userE,passwordE)
-                        .addOnCompleteListener(RegistrarActivity.this, new OnCompleteListener<AuthResult>() {
+                auth.signInWithEmailAndPassword(userE,password).
+                        addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                Toast.makeText(getApplicationContext(), "se ha creado el usuario", Toast.LENGTH_SHORT).show();
-
                                 if (!task.isSuccessful()) {
-                                    Toast.makeText(getApplicationContext(), "tenemos un problema", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "correo o contraseña incorrectos",
+                                            Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Intent intent = new Intent(RegistrarActivity.this, PrincipalActivity.class);
-                                    startActivity(intent);
+                                    Intent intent1 = new Intent(LoginActivity.this, PrincipalActivity.class);
+                                    startActivity(intent1);
                                     finish();
                                 }
                             }
                         });
-
                 break;
         }
     }
