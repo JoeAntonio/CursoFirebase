@@ -1,33 +1,72 @@
 package cursofirebase.com;
 
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import java.util.ArrayList;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.List;
 
 public class PrincipalActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     List<Notes> notesList;
-    NotasAdapter adapter;
+    FloatingActionButton fab;
+    //NotasAdapter adapter;
+    DatabaseReference databaseReference;
+    FirebaseRecyclerAdapter<Notes,NotasAdapter.ViewHolder> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.principal_activity);
         //createData();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        fab = (FloatingActionButton) findViewById(R.id.fab);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        adapter = new NotasAdapter(this,notesList);
+        //adapter = new NotasAdapter(this,notesList);
+        adapter = new FirebaseRecyclerAdapter<Notes, NotasAdapter.ViewHolder>(
+                Notes.class,
+                R.layout.notas,
+                NotasAdapter.ViewHolder.class,
+                databaseReference.child("Listas")
+        ) {
+            @Override
+            protected void populateViewHolder(NotasAdapter.ViewHolder viewHolder, Notes model, int position) {
+                viewHolder.count.setText(String.valueOf(model.getCount()));
+                viewHolder.name.setText(model.getName());
+            }
+        };
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                if (newState == recyclerView.SCROLL_STATE_IDLE) {
+                    fab.show();
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0 || dy < 0 && fab.isShown()) {
+                    fab.hide();
+                }
+            }
+        });
     }
+
+
 
     /*public void createData() {
         notesList = new ArrayList<>();
