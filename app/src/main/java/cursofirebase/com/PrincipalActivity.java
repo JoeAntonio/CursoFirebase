@@ -1,11 +1,13 @@
 package cursofirebase.com;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -13,7 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
-public class PrincipalActivity extends AppCompatActivity {
+public class PrincipalActivity extends AppCompatActivity implements View.OnClickListener {
 
     RecyclerView recyclerView;
     List<Notes> notesList;
@@ -43,9 +45,15 @@ public class PrincipalActivity extends AppCompatActivity {
                 databaseReference.child("Listas")
         ) {
             @Override
-            protected void populateViewHolder(NotasAdapter.ViewHolder viewHolder, Notes model, int position) {
+            protected void populateViewHolder(NotasAdapter.ViewHolder viewHolder, Notes model, final int position) {
                 viewHolder.count.setText(String.valueOf(model.getCount()));
                 viewHolder.name.setText(model.getName());
+                viewHolder.trash.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        adapter.getRef(position).removeValue();
+                    }
+                });
             }
         };
         recyclerView.setAdapter(adapter);
@@ -64,6 +72,18 @@ public class PrincipalActivity extends AppCompatActivity {
                 }
             }
         });
+
+        fab.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab:
+                Intent intent = new Intent(PrincipalActivity.this, InsertNoteActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 
 
