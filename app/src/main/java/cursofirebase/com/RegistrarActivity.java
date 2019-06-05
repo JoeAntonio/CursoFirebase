@@ -14,12 +14,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class RegistrarActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText correo, clave;
     private Button aceptar;
     private FirebaseAuth auth;
+    FirebaseAuth.AuthStateListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,40 +35,63 @@ public class RegistrarActivity extends AppCompatActivity implements View.OnClick
 
         aceptar.setOnClickListener(this);
 
+        listener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = auth.getCurrentUser();
+                if (user != null) {
+                    //SI ESTA LOGUEADO.
+                    abrirMiCuenta();
+                }
+            }
+        };
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.boton_aceptar:
-                String userE = correo.getText().toString();
-                String passwordE = clave.getText().toString();
-
-                if (TextUtils.isEmpty(userE)) {
-                    Toast.makeText(getApplicationContext(), "coloca un correo", Toast.LENGTH_SHORT).show();
-                }
-
-                if (TextUtils.isEmpty(passwordE)) {
-                    Toast.makeText(getApplicationContext(), "coloca una contraseña", Toast.LENGTH_SHORT).show();
-                }
-
-                auth.createUserWithEmailAndPassword(userE,passwordE)
-                        .addOnCompleteListener(RegistrarActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                Toast.makeText(getApplicationContext(), "se ha creado el usuario", Toast.LENGTH_SHORT).show();
-
-                                if (!task.isSuccessful()) {
-                                    Toast.makeText(getApplicationContext(), "tenemos un problema", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Intent intent = new Intent(RegistrarActivity.this, PrincipalActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            }
-                        });
-
+                registrarUsuario();
                 break;
+        }
+    }
+
+    private void registrarUsuario() {
+        String userE = correo.getText().toString();
+        String passwordE = clave.getText().toString();
+        if (!userE.isEmpty() && !passwordE.isEmpty()) {
+            auth.createUserWithEmailAndPassword(userE,passwordE)
+                    .addOnCompleteListener(RegistrarActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getApplicationContext(), "Usuario registrado", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Error al registrar", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+    }
+
+    private void abrirMiCuenta() {
+            Intent i = new Intent(this, InicioActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        auth.addAuthStateListener(listener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (listener != null) {
+            auth.removeAuthStateListener(listener);
         }
     }
 }
